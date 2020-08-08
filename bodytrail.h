@@ -3,28 +3,33 @@
 
 #include <QGraphicsItem>
 #include <QLinkedList>
+#include <QObject>
 
-class BodyTrail : public QGraphicsItem
+class BodyTrail : public QObject, public QGraphicsItem
 {
-    QGraphicsItem *body;
-    QLinkedList<QPointF> path;
-    bool active;
-    int length;
-    qreal minX, maxX, minY, maxY;
+    Q_OBJECT
 
+    QGraphicsItem *_body;
+    QLinkedList<QPointF> _path;
+    bool _active;
+    int _length;
 
 public:
-    BodyTrail(QGraphicsItem* attachedTo, int length=100);
+    BodyTrail(QGraphicsItem* attachedTo);
 
-    int len() const { return length; }
-    bool disabled() const { return !active; }
-    void disable(bool disable=true) { active = !disable; }
-    void setLen(int newLen) { length = newLen; }
+    int len() const { return _length; }
+    bool disabled() const { return !_active; }
+    void disable(bool disable=true) { _active = !disable; }
+    void setLen(int newLen) { _length = newLen; }
     void updateTrail();
 
 protected:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
+public slots:
+    void trailLengthChanged(int length);
+
 };
 
 #endif // BODYTRAIL_H

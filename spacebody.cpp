@@ -18,7 +18,15 @@ void SpaceBody::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
     painter->fillPath(shape(), QBrush(Qt::white));
     painter->drawEllipse(-radius, -radius, radius * 2, radius * 2);
 
-    painter->
+//    // draw velocity vector
+    if (_drawVelocityVector)
+    {
+        QLineF line(0, 0, 1, 1);
+        line.setLength(velocity.length() * 500);
+        line.setAngle(velocity.angle());
+        painter->drawLine(line);
+    }
+
 //    painter->drawRect(boundingRect());
 //    painter->setPen(Qt::green);
 //    painter->drawPath(shape());
@@ -37,4 +45,9 @@ QPainterPath SpaceBody::shape() const
     QPainterPath path;
     path.addEllipse(boundingRect());
     return path;
+}
+
+void SpaceBody::enableVector(bool enable)
+{
+    _drawVelocityVector = enable;
 }

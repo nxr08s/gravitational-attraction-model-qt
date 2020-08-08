@@ -18,16 +18,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     bodytrail.cpp \
     graphicsview.cpp \
+    itemproperties.cpp \
     main.cpp \
     mainwindow.cpp \
+    ruler.cpp \
     spacebody.cpp
 
 HEADERS += \
     bodytrail.h \
     graphicsview.h \
+    itemproperties.h \
     mainwindow.h \
     physvector.h \
-    spacebody.h
+    ruler.h \
+    spacebody.h \
+    spacebodyproperties.h
 
 FORMS += \
     mainwindow.ui

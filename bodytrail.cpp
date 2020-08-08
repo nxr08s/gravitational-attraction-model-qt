@@ -2,53 +2,67 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QEasingCurve>
+
 #include <algorithm>
 
-BodyTrail::BodyTrail(QGraphicsItem *attachedTo, int len)
-    : QGraphicsItem()
-    , body(attachedTo)
-    , active(true)
-    , length(len)
-    , minX(body->x())
-    , maxX(minX)
-    , minY(body->y())
-    , maxY(minY)
+BodyTrail::BodyTrail(QGraphicsItem *attachedTo)
+    : _body(attachedTo)
+    , QGraphicsItem(attachedTo)
+    , _active(true)
+    , _length(100)
 {
-
+    _path << QPointF(0, 0);
+    setFlag(QGraphicsItem::ItemStacksBehindParent);
 }
 
 void BodyTrail::updateTrail()
 {
-    if (QLineF(body->pos(), path.last()).length() < 2)
+    if (QLineF(_body->pos(), _path.last()).length() < 2)
     {
-        path.removeFirst();
+//        path.pop_front();
         return;
     }
 
-    if (path.size() > length)
-        path.pop_front();
+    if (_path.size() > _length)
+        _path.pop_front();
 
-    path.push_back(body->pos());
+    _path.push_back(_body->pos());
 
 //    update(QRectF(path.first(), path.last()).normalized());
 }
 
 QRectF BodyTrail::boundingRect() const
 {
-//    return QRectF(minX, minY, maxX, maxY).normalized();
-    return QRectF(path.first(), path.last()).normalized();
+    return QRectF(mapFromScene(_path.first()), mapFromScene(_path.last()));
 }
 
-void BodyTrail::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void BodyTrail::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-    qreal opacStep = .5 / path.size();
+    if (!_length)
+        return;
 
+    qreal opacStep = .5 / _path.size();
     painter->setOpacity(0);
-    for (auto p = path.begin() + 1; p != path.end(); ++p)
+
+//    QEasingCurve curve(QEasingCurve::OutQuint);
+//    painter->setPen(QPen(QBrush(Qt::black), 0));
+    for (int i = 1; i < _path.size(); i++)
     {
-        painter->drawLine(*(p - 1), *(p));
+//        painter->setPen(QPen(QBrush(Qt::black), curve.valueForProgress(qreal(i) / qreal(path.size())) * 10));
+
+        painter->drawLine(mapFromScene(*(_path.begin() + i - 1)), mapFromScene(*(_path.begin() + i)));
         painter->setOpacity(painter->opacity() + opacStep);
     }
 
-//    painter->drawRect(boundingRect());
+    //    painter->drawRect(boundingRect());
+}
+
+void BodyTrail::trailLengthChanged(int length)
+{
+    _length = length;
+    if (length == 0)
+    {
+        _path.clear();
+    }
 }

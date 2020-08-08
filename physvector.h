@@ -28,6 +28,32 @@ public:
         return newVector;
     }
 
+    PhysVector operator*(qreal num){
+        PhysVector newVector(p1(), p2());
+        newVector.setLength(newVector.length() * num);
+        return newVector;
+    }
+
+    PhysVector& operator+=(const PhysVector& vec){
+        this->setP1(QPointF(this->x1() + vec.x1(),
+                            this->y1() + vec.y1()));
+        this->setP2(QPointF(this->x2() + vec.x2(),
+                            this->y2() + vec.y2()));
+        return *this;
+    }
+
+    PhysVector& operator/=(qreal num){
+        this->setP2(QPointF(this->x2() / num,
+                            this->y2() / num));
+        return *this;
+    }
+
+    PhysVector operator*=(qreal num){
+        this->setP2(QPointF(this->x2() * num,
+                            this->y2() * num));
+        return *this;
+    }
+
 };
 
 #endif // PHYSVECTOR_H
