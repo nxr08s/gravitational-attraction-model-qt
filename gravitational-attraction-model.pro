@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,22 +17,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     bodytrail.cpp \
+    dbhelper.cpp \
     graphicsview.cpp \
     itemproperties.cpp \
+    loaddialog.cpp \
     main.cpp \
     mainwindow.cpp \
-    ruler.cpp \
-    spacebody.cpp
+    spacebody.cpp \
+    trajectory.cpp
 
 HEADERS += \
     bodytrail.h \
+    dbhelper.h \
     graphicsview.h \
     itemproperties.h \
+    loaddialog.h \
     mainwindow.h \
     physvector.h \
-    ruler.h \
     spacebody.h \
-    spacebodyproperties.h
+    trajectory.h
 
 FORMS += \
     mainwindow.ui
@@ -41,3 +44,8 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc \
+    style.qrc
+    style.qrc

@@ -1,40 +1,39 @@
 #include "bodytrail.h"
 
 #include <QPainter>
-#include <QDebug>
 #include <QEasingCurve>
+#include <QDebug>
 
 #include <algorithm>
 
 BodyTrail::BodyTrail(QGraphicsItem *attachedTo)
-    : _body(attachedTo)
-    , QGraphicsItem(attachedTo)
-    , _active(true)
+    : QGraphicsItem(attachedTo)
     , _length(100)
 {
-    _path << QPointF(0, 0);
+    _points << parentItem()->pos();
     setFlag(QGraphicsItem::ItemStacksBehindParent);
+    setAcceptedMouseButtons(Qt::NoButton);
 }
 
 void BodyTrail::updateTrail()
 {
-    if (QLineF(_body->pos(), _path.last()).length() < 2)
-    {
-//        path.pop_front();
+
+    if (QLineF(parentItem()->pos(), _points.last()).length() < 2)
         return;
-    }
 
-    if (_path.size() > _length)
-        _path.pop_front();
+    if (_points.size() > _length)
+        _points.removeFirst();
 
-    _path.push_back(_body->pos());
+    _points.push_back(parentItem()->pos());
 
-//    update(QRectF(path.first(), path.last()).normalized());
+    _path = QPainterPath();
+    for (auto pt : _points)
+        _path.lineTo(mapFromScene(pt));
 }
 
 QRectF BodyTrail::boundingRect() const
 {
-    return QRectF(mapFromScene(_path.first()), mapFromScene(_path.last()));
+    return _path.boundingRect();
 }
 
 void BodyTrail::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget *)
@@ -42,27 +41,21 @@ void BodyTrail::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidge
     if (!_length)
         return;
 
-    qreal opacStep = .5 / _path.size();
+    qreal opacStep = .5 / _points.size();
     painter->setOpacity(0);
 
-//    QEasingCurve curve(QEasingCurve::OutQuint);
-//    painter->setPen(QPen(QBrush(Qt::black), 0));
-    for (int i = 1; i < _path.size(); i++)
-    {
-//        painter->setPen(QPen(QBrush(Qt::black), curve.valueForProgress(qreal(i) / qreal(path.size())) * 10));
-
-        painter->drawLine(mapFromScene(*(_path.begin() + i - 1)), mapFromScene(*(_path.begin() + i)));
+    for (int i = 1; i < _points.size(); i++){
+        painter->drawLine(mapFromScene(*(_points.begin() + i - 1)),
+                          mapFromScene(*(_points.begin() + i)));
         painter->setOpacity(painter->opacity() + opacStep);
     }
-
-    //    painter->drawRect(boundingRect());
 }
 
-void BodyTrail::trailLengthChanged(int length)
+void BodyTrail::setLength(int length)
 {
     _length = length;
-    if (length == 0)
-    {
-        _path.clear();
+    if (length == 0){
+        _points.clear();
+        _points << parentItem()->pos();
     }
 }

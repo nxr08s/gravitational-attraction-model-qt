@@ -2,33 +2,32 @@
 #define BODYTRAIL_H
 
 #include <QGraphicsItem>
-#include <QLinkedList>
 #include <QObject>
+#include <QLinkedList>
+#include <QPainterPath>
 
 class BodyTrail : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
-    QGraphicsItem *_body;
-    QLinkedList<QPointF> _path;
-    bool _active;
+    QPainterPath _path;
+    QLinkedList<QPointF> _points;
     int _length;
 
 public:
     BodyTrail(QGraphicsItem* attachedTo);
 
-    int len() const { return _length; }
-    bool disabled() const { return !_active; }
-    void disable(bool disable=true) { _active = !disable; }
-    void setLen(int newLen) { _length = newLen; }
-    void updateTrail();
-
 protected:
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = nullptr) override;
+    int type() const override { return UserType + 1; };
 
 public slots:
-    void trailLengthChanged(int length);
+    void setLength(int length);
+    void updateTrail();
 
 };
 

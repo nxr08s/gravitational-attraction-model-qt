@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/zoomOut.svg</file>
+        <file>resources/zoomIn.svg</file>
+        <file>resources/addItem.svg</file>
+        <file>resources/drawVector.svg</file>
+        <file>resources/drawTrail.svg</file>
+        <file>resources/load.svg</file>
+        <file>resources/save.svg</file>
+        <file>resources/editProp.svg</file>
+        <file>resources/vectorEdit.svg</file>
+        <file>resources/slow_1.svg</file>
+        <file>resources/slow_2.svg</file>
+        <file>resources/fast_1.svg</file>
+        <file>resources/fast_2.svg</file>
+        <file>resources/start.svg</file>
+        <file>resources/stop.svg</file>
+        <file>resources/icon.svg</file>
+        <file>resources/themeDark.svg</file>
+        <file>resources/themeLight.svg</file>
+    </qresource>
+</RCC>

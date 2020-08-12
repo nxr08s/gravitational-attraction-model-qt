@@ -7,31 +7,32 @@ class QGraphicsItem;
 class SpaceBody;
 class QPushButton;
 class QLineEdit;
+class QCheckBox;
 
 class ItemProperties : public QWidget
 {
     Q_OBJECT
 
-    QGraphicsItem *itm;
+    SpaceBody *body;
 
     QPushButton *applyBtn;
-    QPushButton *cancelBtn;
     QPushButton *removeBtn;
     QLineEdit *massEdit;
     QLineEdit *radiusEdit;
     QLineEdit *velocityEdit;
+    QCheckBox *staticCheckBox;
 
 public:
-    explicit ItemProperties(QGraphicsItem* item, QWidget *parent = nullptr);
+    ItemProperties(QGraphicsItem* item, QWidget *parent = nullptr);
 
 public slots:
-    void onClickCancel();
     void onClickApply();
     void onClickRemove();
+    void onTriggerStatic(int);
 
 signals:
     void itemRemove(QGraphicsItem*);
-    void itemChanged(SpaceBody*);
+
 };
 
 #endif // ITEMPROPERTIES_H

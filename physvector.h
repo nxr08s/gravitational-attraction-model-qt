@@ -13,47 +13,20 @@ public:
     PhysVector(qreal x1, qreal y1, qreal x2, qreal y2) : QLineF(x1, y1, x2, y2) {};
     PhysVector(QPointF p1, QPointF p2) : QLineF(p1, p2) {};
 
-    qreal getProjX() const { return length() * cos(qDegreesToRadians(angle())); };
-    qreal getProjY() const { return length() * sin(qDegreesToRadians(angle())); };
+    qreal xProjection() const { return length() * cos(qDegreesToRadians(angle())); };
+    qreal yProjection() const { return length() * sin(qDegreesToRadians(angle())); };
 
     PhysVector operator+(PhysVector& vec){ return PhysVector(
                     this->x1() + vec.x1(),
                     this->y1() + vec.y1(),
                     this->x2() + vec.x2(),
-                    this->y2() + vec.y2()); }
+                    this->y2() + vec.y2());}
 
     PhysVector operator/(qreal num){
         PhysVector newVector(p1(), p2());
         newVector.setLength(newVector.length() / num);
         return newVector;
     }
-
-    PhysVector operator*(qreal num){
-        PhysVector newVector(p1(), p2());
-        newVector.setLength(newVector.length() * num);
-        return newVector;
-    }
-
-    PhysVector& operator+=(const PhysVector& vec){
-        this->setP1(QPointF(this->x1() + vec.x1(),
-                            this->y1() + vec.y1()));
-        this->setP2(QPointF(this->x2() + vec.x2(),
-                            this->y2() + vec.y2()));
-        return *this;
-    }
-
-    PhysVector& operator/=(qreal num){
-        this->setP2(QPointF(this->x2() / num,
-                            this->y2() / num));
-        return *this;
-    }
-
-    PhysVector operator*=(qreal num){
-        this->setP2(QPointF(this->x2() * num,
-                            this->y2() * num));
-        return *this;
-    }
-
 };
 
 #endif // PHYSVECTOR_H
