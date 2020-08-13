@@ -22,13 +22,17 @@ class ItemProperties : public QWidget
     QLineEdit *velocityEdit;
     QCheckBox *staticCheckBox;
 
+    void applyChanges();
+
 public:
     ItemProperties(QGraphicsItem* item, QWidget *parent = nullptr);
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 public slots:
     void onClickApply();
     void onClickRemove();
-    void onTriggerStatic(int);
 
 signals:
     void itemRemove(QGraphicsItem*);

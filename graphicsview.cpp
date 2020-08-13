@@ -99,7 +99,7 @@ QGraphicsProxyWidget *GraphicsView::createItemPropItem(QGraphicsItem *itm)
     propWgt->setScale(1 / _scale);
     propWgt->setZValue(3);
 
-    connect(_propertiesWgt, SIGNAL(destroyed()),
+    connect(propWgt, SIGNAL(destroyed()),
             this, SLOT(propertiesWidnowDestroyed()));
     connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
             this, SLOT(itemRemoved(QGraphicsItem*)));

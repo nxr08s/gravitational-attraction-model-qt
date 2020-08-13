@@ -13,9 +13,19 @@
 #include "graphicsview.h"
 #include "spacebody.h"
 
+void ItemProperties::applyChanges()
+{
+    body->setMass(massEdit->text().toDouble());
+    body->setRadius(radiusEdit->text().toDouble());
+    body->setVelocity(velocityEdit->text().toDouble());
+    body->setStatic(staticCheckBox->isChecked());
+}
+
 ItemProperties::ItemProperties(QGraphicsItem *item, QWidget *parent)
     : QWidget(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     body = dynamic_cast<SpaceBody*>(item);
 
     QVBoxLayout *lt1 = new QVBoxLayout(this);
@@ -62,25 +72,31 @@ ItemProperties::ItemProperties(QGraphicsItem *item, QWidget *parent)
 
     connect(applyBtn, SIGNAL(clicked()), this, SLOT(onClickApply()));
     connect(removeBtn, SIGNAL(clicked()), this, SLOT(onClickRemove()));
-    connect(staticCheckBox, SIGNAL(stateChanged(int)), this, SLOT(onTriggerStatic(int)));
+}
+
+void ItemProperties::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_Return:
+        applyChanges();
+        break;
+    case Qt::Key_Escape:
+        break;
+    default:
+        QWidget::keyPressEvent(event);
+        return;
+    }
+    close();
 }
 
 void ItemProperties::onClickApply()
 {
-    body->setMass(massEdit->text().toDouble());
-    body->setRadius(radiusEdit->text().toDouble());
-    body->setVelocity(velocityEdit->text().toDouble());
-
-    deleteLater();
+    applyChanges();
+    close();
 }
 
 void ItemProperties::onClickRemove()
 {
     emit itemRemove(body);
-    deleteLater();
-}
-
-void ItemProperties::onTriggerStatic(int state)
-{
-    body->setStatic(state == Qt::Checked);
+    close();
 }
