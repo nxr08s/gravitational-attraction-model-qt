@@ -51,7 +51,10 @@ void SpaceBody::applyForce()
 
 void SpaceBody::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *wgt)
 {
-    painter->fillPath(shape(), wgt->palette().base());
+    painter->fillPath(shape(),
+                      isStatic()
+                      ? wgt->palette().brush(QPalette::Inactive, QPalette::Dark)
+                      : wgt->palette().base());
     painter->drawEllipse(-_radius, -_radius, _radius * 2, _radius * 2);
 
     // draw velocity vector
@@ -67,34 +70,34 @@ void SpaceBody::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         arrow.setAngle(arrow.angle() + 60);
         painter->drawLine(arrow);
     }
-//    painter->setPen(Qt::red);
-//    painter->drawRect(boundingRect());
+    //    painter->setPen(Qt::red);
+    //    painter->drawRect(boundingRect());
 }
 
 QRectF SpaceBody::boundingRect() const
 {    
-//    QPainterPath path;
-//    path.addRect(-_radius - 0.5, -_radius - 0.5,
-//                 _radius * 2 + 0.5, _radius * 2 + 0.5);
+    //    QPainterPath path;
+    //    path.addRect(-_radius - 0.5, -_radius - 0.5,
+    //                 _radius * 2 + 0.5, _radius * 2 + 0.5);
 
-//    if (_drawVelocityVector){
-//        QLineF line(0, 0, 1, 1);
-//        line.setLength(_velocity.length() * 500);
-//        line.setAngle(_velocity.angle());
-//        path.lineTo(line.p2());
+    //    if (_drawVelocityVector){
+    //        QLineF line(0, 0, 1, 1);
+    //        line.setLength(_velocity.length() * 500);
+    //        line.setAngle(_velocity.angle());
+    //        path.lineTo(line.p2());
 
-//        QLineF arrow(line.p2(), line.p1());
-//        arrow.setLength(7);
-//        arrow.setAngle(arrow.angle() - 30);
-//        path.lineTo(arrow.p2());
-//        arrow.setAngle(arrow.angle() + 60);
-//        path.lineTo(arrow.p2());
-//    }
+    //        QLineF arrow(line.p2(), line.p1());
+    //        arrow.setLength(7);
+    //        arrow.setAngle(arrow.angle() - 30);
+    //        path.lineTo(arrow.p2());
+    //        arrow.setAngle(arrow.angle() + 60);
+    //        path.lineTo(arrow.p2());
+    //    }
 
-//    return path.boundingRect();
+    //    return path.boundingRect();
 
-        return QRectF(-_radius - 0.5, -_radius - 0.5,
-                      _radius * 2 + 0.5, _radius * 2 + 0.5);
+    return QRectF(-_radius - 0.5, -_radius - 0.5,
+                  _radius * 2 + 0.5, _radius * 2 + 0.5);
 }
 
 QPainterPath SpaceBody::shape() const
