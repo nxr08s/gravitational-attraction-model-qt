@@ -39,10 +39,11 @@ private:
     static PhysVector calculateForce(SpaceBody *s1, SpaceBody *s2) ;
     static void processCollision(SpaceBody*, SpaceBody*);
     QGraphicsItem* getBodyUnderMouse(QPoint);
+    QGraphicsProxyWidget* createItemPropItem(QGraphicsItem*);
 
 public:
     GraphicsView(QWidget *parent);
-    void addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius);
+    QGraphicsItem* addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius);
     void insertItems(QList<SpaceBody*>);
     void timerEnable(bool enable);
     qreal sceneScale() const {

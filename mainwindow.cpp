@@ -249,6 +249,7 @@ void MainWindow::modeChanged(unsigned int mode)
         modeLabel->setText("Режим: Редактор скорости");
         break;
     case GraphicsView::PropEdit:
+        ui->propEditAction->setChecked(true);
         modeLabel->setText("Режим: Редактор свойств");
         break;
     }

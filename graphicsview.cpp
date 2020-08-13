@@ -89,6 +89,24 @@ QGraphicsItem *GraphicsView::getBodyUnderMouse(QPoint pos)
     return body;
 }
 
+QGraphicsProxyWidget *GraphicsView::createItemPropItem(QGraphicsItem *itm)
+{
+    ItemProperties *itemProp = new ItemProperties(itm);
+
+    QGraphicsProxyWidget* propWgt = scene()->addWidget(itemProp);
+
+    propWgt->setPos(itm->pos());
+    propWgt->setScale(1 / _scale);
+    propWgt->setZValue(3);
+
+    connect(_propertiesWgt, SIGNAL(destroyed()),
+            this, SLOT(propertiesWidnowDestroyed()));
+    connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
+            this, SLOT(itemRemoved(QGraphicsItem*)));
+
+    return propWgt;
+}
+
 GraphicsView::GraphicsView(QWidget *parent)
     : QGraphicsView(parent)
     , _mode(None)
@@ -111,7 +129,7 @@ GraphicsView::GraphicsView(QWidget *parent)
     //    setOptimizationFlag(DontAdjustForAntialiasing);
 }
 
-void GraphicsView::addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius)
+QGraphicsItem* GraphicsView::addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius)
 {
     SpaceBody *newBody = new SpaceBody(pos, mass, xVel, yVel, radius);
     BodyTrail *trail = new BodyTrail(newBody);
@@ -126,6 +144,8 @@ void GraphicsView::addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qrea
     connect(this, SIGNAL(enableVector(bool)), newBody, SLOT(enableVector(bool)));
 
     emit enableVector(_vectorEnabled);
+
+    return newBody;
 }
 
 void GraphicsView::insertItems(QList<SpaceBody*> items)
@@ -296,28 +316,31 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
             }
         }else{
             if (itm && itm->type() == Body && event->button() == Qt::RightButton){
-                ItemProperties *itemProp = new ItemProperties(itm);
+//                ItemProperties *itemProp = new ItemProperties(itm);
 
-                _propertiesWgt = scene()->addWidget(itemProp);
+//                _propertiesWgt = scene()->addWidget(itemProp);
 
-                _propertiesWgt->setPos(mapToScene(event->pos()));
-                _propertiesWgt->setScale(1 / _scale);
-                _propertiesWgt->setZValue(3);
+//                _propertiesWgt->setPos(mapToScene(event->pos()));
+//                _propertiesWgt->setScale(1 / _scale);
+//                _propertiesWgt->setZValue(3);
 
-                connect(_propertiesWgt, SIGNAL(destroyed()),
-                        this, SLOT(propertiesWidnowDestroyed()));
-                connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
-                        this, SLOT(itemRemoved(QGraphicsItem*)));
-                return;
+//                connect(_propertiesWgt, SIGNAL(destroyed()),
+//                        this, SLOT(propertiesWidnowDestroyed()));
+//                connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
+//                        this, SLOT(itemRemoved(QGraphicsItem*)));
+//                return;
+
+                _propertiesWgt = createItemPropItem(itm);
             }
         }
         QGraphicsView::mousePressEvent(event);
         break;
     case NewItem:
         if (!itm || itm->type() != Body){
-            addItem(mapToScene(event->pos()),10,0,0,10);
-            setMouseMode(None);
-            emit modeChanged(None);
+            QGraphicsItem* newItem = addItem(mapToScene(event->pos()),10,0,0,10);
+            _propertiesWgt = createItemPropItem(newItem);
+            setMouseMode(PropEdit);
+            emit modeChanged(PropEdit);
             scene()->update();
         }
         break;
