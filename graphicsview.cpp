@@ -233,9 +233,9 @@ void GraphicsView::timerEvent(QTimerEvent *event)
     if (_timerId == event->timerId()){
         QList<SpaceBody*> items = bodies();
         for (int i = 0; i < _timeScale; i++){
-//            QElapsedTimer timer;
-//            timer.start();
-//            qDebug() << " ------ ";
+            //            QElapsedTimer timer;
+            //            timer.start();
+            //            qDebug() << " ------ ";
 
             //             calculate all gravitational forces
             for (auto b1 = items.begin(); b1 != items.end(); ++b1)
@@ -244,36 +244,28 @@ void GraphicsView::timerEvent(QTimerEvent *event)
                     (*b1)->addForce(force);
                     (*b2)->addForce(PhysVector::reversed(force));
                 }
-//            qDebug() << "forces:" << timer.nsecsElapsed();
-//            timer.restart();
+            //            qDebug() << "forces:" << timer.nsecsElapsed();
+            //            timer.restart();
 
             // check for collisions
             for (auto b1 = items.begin(); b1 != items.end(); ++b1)
                 for (auto b2 = b1 + 1; b2 != items.end(); ++b2)
                     if ((*b1)->collidesWithItem(*b2))
                         processCollision(*b1, *b2);
-//            qDebug() << "collisions:" << timer.nsecsElapsed();
-//            timer.restart();
+            //            qDebug() << "collisions:" << timer.nsecsElapsed();
+            //            timer.restart();
 
             // apply forces to all space bodies
             for (auto b : items)
                 b->applyForce();
-//            qDebug() << "applying forces:" << timer.nsecsElapsed();
-//            timer.restart();
+            //            qDebug() << "applying forces:" << timer.nsecsElapsed();
+            //            timer.restart();
         }
 
         if (_tailEnabled)
             emit updateTrail();
     }
 }
-
-//void GraphicsView::drawBackground(QPainter *painter, const QRectF&)
-//{
-//    painter->setOpacity(0.5);
-////    painter->setPen(Qt::black);
-//    painter->drawLine(-100, 0, 100, 0);
-//    painter->drawLine(0, -100, 0, 100);
-//}
 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
@@ -315,23 +307,8 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
                 return;
             }
         }else{
-            if (itm && itm->type() == Body && event->button() == Qt::RightButton){
-//                ItemProperties *itemProp = new ItemProperties(itm);
-
-//                _propertiesWgt = scene()->addWidget(itemProp);
-
-//                _propertiesWgt->setPos(mapToScene(event->pos()));
-//                _propertiesWgt->setScale(1 / _scale);
-//                _propertiesWgt->setZValue(3);
-
-//                connect(_propertiesWgt, SIGNAL(destroyed()),
-//                        this, SLOT(propertiesWidnowDestroyed()));
-//                connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
-//                        this, SLOT(itemRemoved(QGraphicsItem*)));
-//                return;
-
+            if (itm && itm->type() == Body && event->button() == Qt::RightButton)
                 _propertiesWgt = createItemPropItem(itm);
-            }
         }
         QGraphicsView::mousePressEvent(event);
         break;
@@ -391,7 +368,7 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
         if (_currentVelocityItem){
             _currentVelocityItem = nullptr;
             scene()->removeItem(_trajectory);
-            //      !!! MEMORY LEAK !!! \/---- fix it (crashes smt if delete this)
+            //      !!! MEMORY LEAK !!! \/---- fix it (crashes sometimes if delete this)
             //            delete _trajectory;
             _trajectory = nullptr;
         }
