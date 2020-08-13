@@ -39,7 +39,7 @@ void Trajectory::updatePath()
         tempPos = QPointF(tempPos.x() + velocity.xProjection(),
                           tempPos.y() - velocity.yProjection());
 
-        QList<QGraphicsItem*> itemsUnderPointer = scene()->items(tempPos);
+        QList<QGraphicsItem*> itemsUnderPointer = scene()->items(tempPos, Qt::ContainsItemShape);
         QGraphicsItem *intersectedItem = nullptr;
         for (auto item : itemsUnderPointer){
             if (item->type() == 65536){

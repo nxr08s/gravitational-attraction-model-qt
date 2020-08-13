@@ -26,6 +26,7 @@ public slots:
     void onClickRemove();
     void onClickLoad();
     void onDblClick(QListWidgetItem*);
+    void itemSelectionChanged();
 };
 
 #endif // LOADDIALOG_H

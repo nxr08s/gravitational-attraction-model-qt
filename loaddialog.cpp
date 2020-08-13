@@ -42,6 +42,9 @@ LoadDialog::LoadDialog(QWidget* parent, DbHelper* database)
     connect(acceptBtn, SIGNAL(clicked()), this, SLOT(onClickLoad()));
     connect(listWgt, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(onDblClick(QListWidgetItem*)));
+
+    connect(listWgt, SIGNAL(itemSelectionChanged()),
+            this, SLOT(itemSelectionChanged()));
 }
 
 QString LoadDialog::resultName() const
@@ -78,3 +81,12 @@ void LoadDialog::onDblClick(QListWidgetItem *item)
     resultStr = item->text();
     accept();
 }
+
+void LoadDialog::itemSelectionChanged()
+{
+    if (listWgt->currentItem() == nullptr){
+        acceptBtn->setEnabled(false);
+        removeBtn->setEnabled(false);
+    }
+}
+

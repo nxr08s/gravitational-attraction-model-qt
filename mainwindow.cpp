@@ -235,6 +235,7 @@ void MainWindow::modeChanged(unsigned int mode)
 {
     switch (mode){
     case GraphicsView::None:
+        ui->vectorsAction->setChecked(false);
         ui->velEditAction->setChecked(false);
         ui->propEditAction->setChecked(false);
         ui->addItemAction->setChecked(false);
@@ -253,9 +254,9 @@ void MainWindow::modeChanged(unsigned int mode)
     }
 }
 
-void MainWindow::zoomChanged(qreal newScale)
+void MainWindow::zoomChanged(qreal)
 {
-    scaleLabel->setText("Масштаб: " + QString::number(100*newScale) + "%");
+    scaleLabel->setText("Масштаб: " + QString::number(100*graphicsView->sceneScale()) + "%");
 }
 
 void MainWindow::timeScaleChanged(int newTimeScale)

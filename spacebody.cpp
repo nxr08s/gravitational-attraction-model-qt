@@ -1,5 +1,6 @@
 #include "spacebody.h"
 #include <QPainter>
+#include <QWidget>
 
 SpaceBody::SpaceBody(qreal xPos, qreal yPos,
                      qreal mass, qreal radius,
@@ -48,10 +49,9 @@ void SpaceBody::applyForce()
     _totalForce = PhysVector(0, 0, 0, 0);
 }
 
-void SpaceBody::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void SpaceBody::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *wgt)
 {
-    painter->setPen(Qt::black);
-    painter->fillPath(shape(), QBrush(Qt::white));
+    painter->fillPath(shape(), wgt->palette().base());
     painter->drawEllipse(-_radius, -_radius, _radius * 2, _radius * 2);
 
     // draw velocity vector

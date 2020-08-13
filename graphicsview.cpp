@@ -247,15 +247,13 @@ void GraphicsView::timerEvent(QTimerEvent *event)
     }
 }
 
-void GraphicsView::drawBackground(QPainter *painter, const QRectF &rect)
-{
-    Q_UNUSED(rect)
-
-    painter->setOpacity(0.5);
-    painter->setPen(Qt::black);
-    painter->drawLine(-100, 0, 100, 0);
-    painter->drawLine(0, -100, 0, 100);
-}
+//void GraphicsView::drawBackground(QPainter *painter, const QRectF&)
+//{
+//    painter->setOpacity(0.5);
+////    painter->setPen(Qt::black);
+//    painter->drawLine(-100, 0, 100, 0);
+//    painter->drawLine(0, -100, 0, 100);
+//}
 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
 {
@@ -408,14 +406,14 @@ void GraphicsView::zoomIn()
 {
     _scale *= 1.2;
     scale(1.2, 1.2);
-    emit zoomChanged(_scale);
+    emit zoomChanged(1.2);
 }
 
 void GraphicsView::zoomOut()
 {
     _scale /= 1.2;
     scale(1 / 1.2, 1 / 1.2);
-    emit zoomChanged(_scale);
+    emit zoomChanged(1 / 1.2);
 }
 
 void GraphicsView::vectorChecked(bool enabled)

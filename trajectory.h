@@ -25,6 +25,7 @@ protected:
                QWidget *widget = nullptr) override;
     QRectF boundingRect() const override;
     int type() const override { return UserType + 2; };
+//    QPainterPath shape() const override;
 
 };
 

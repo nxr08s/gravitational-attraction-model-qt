@@ -45,6 +45,9 @@ public:
     void addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius);
     void insertItems(QList<SpaceBody*>);
     void timerEnable(bool enable);
+    qreal sceneScale() const {
+        return _scale;
+    };
     int trailLength() const {
         return _trailLength;
     };
@@ -63,7 +66,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void timerEvent(QTimerEvent* event) override;
-    void drawBackground(QPainter *painter, const QRectF &rect) override;
+//    void drawBackground(QPainter *painter, const QRectF &rect) override;
 
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
