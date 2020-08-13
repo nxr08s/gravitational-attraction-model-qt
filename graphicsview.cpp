@@ -159,8 +159,8 @@ void GraphicsView::timerEnable(bool enable)
 
 void GraphicsView::clearScene()
 {
-    scene()->clear();
-    scene()->update();
+    scene()->deleteLater();
+    setScene(new QGraphicsScene(this));
 }
 
 void GraphicsView::keyPressEvent(QKeyEvent *event)
