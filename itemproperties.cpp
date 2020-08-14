@@ -46,19 +46,16 @@ ItemProperties::ItemProperties(QGraphicsItem *item, QWidget *parent)
     lt = new QHBoxLayout();
     lt->addWidget(new QLabel("Масса", this));
     lt->addWidget(massEdit);
-    lt->addWidget(new QLabel("кг", this));
     mainLt->addLayout(lt);
 
     lt = new QHBoxLayout();
     lt->addWidget(new QLabel("Радиус",this));
     lt->addWidget(radiusEdit);
-    lt->addWidget(new QLabel("м", this));
     mainLt->addLayout(lt);
 
     lt = new QHBoxLayout();
     lt->addWidget(new QLabel("Скорость",this));
     lt->addWidget(velocityEdit);
-    lt->addWidget(new QLabel("м/с", this));
     mainLt->addLayout(lt);
 
     mainLt->addWidget(staticCheckBox);
