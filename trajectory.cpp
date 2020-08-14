@@ -7,11 +7,10 @@
 #include "physvector.h"
 #include "spacebody.h"
 
-Trajectory::Trajectory(QGraphicsItem* parent, QList<SpaceBody*> &items)
+Trajectory::Trajectory(QGraphicsItem* parent, QList<SpaceBody*> items)
     : QGraphicsItem(parent)
     , _bodies(items)
 {
-    updatePath();
     setFlag(QGraphicsItem::ItemStacksBehindParent);
     setAcceptedMouseButtons(Qt::NoButton);
 }
@@ -39,18 +38,14 @@ void Trajectory::updatePath()
         tempPos = QPointF(tempPos.x() + velocity.xProjection(),
                           tempPos.y() - velocity.yProjection());
 
-        QList<QGraphicsItem*> itemsUnderPointer = scene()->items(tempPos, Qt::ContainsItemShape);
-        QGraphicsItem *intersectedItem = nullptr;
-        for (auto item : itemsUnderPointer){
-            if (item->type() == 65536){
-                intersectedItem = item;
+        bool intersects = false;
+        for (auto body : _bodies){
+            if (body->contains(body->mapFromScene(tempPos))){
+                intersects = true;
                 break;
             }
         }
-
-        if (intersectedItem &&
-            intersectedItem != parentItem() &&
-            intersectedItem->type() == 65536)   // 65536 - QGraphicsItem::UserType (SpaceBody)
+        if (intersects)
             break;
 
         if (QLineF(tempPos, _points.last()).length() > 3)
@@ -63,14 +58,13 @@ void Trajectory::updatePath()
 
 void Trajectory::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-
     qreal opacityDelta = qreal(1) / _points.size();
 
     painter->setOpacity(1);
 
     for (int i = 1; i < _points.size(); i++){
-        painter->drawLine(mapFromScene(*(_points.begin() + i - 1)),
-                          mapFromScene(*(_points.begin() + i)));
+        painter->drawLine(mapFromScene(_points.at(i - 1)),
+                          mapFromScene(_points.at(i)));
         painter->setOpacity(painter->opacity() - opacityDelta);
     }
 

@@ -209,8 +209,8 @@ void MainWindow::onClickSave()
     QStringList names = db.saveNames();
     if (names.contains(saveName)){
         QMessageBox::warning(nullptr,
-                             "Сохранить", "Не удалось сохранить сцену. '"
-                             + saveName + "' уже существует.");
+                             "Сохранить", "Не удалось сохранить сцену. \""
+                             + saveName + "\" уже существует.");
         return;
     }
     db.save(saveName, graphicsView->bodies());

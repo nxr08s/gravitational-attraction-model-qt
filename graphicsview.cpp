@@ -120,6 +120,7 @@ GraphicsView::GraphicsView(QWidget *parent)
     , _tailEnabled(true)
     , _propertiesWgt(nullptr)
     , _currentVelocityItem(nullptr)
+    , _trajectory(nullptr)
 {
     setScene(new QGraphicsScene(this));
 
@@ -334,7 +335,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
     }
     switch (_mode){
     case VectorEdit:
-        if (_currentVelocityItem){
+        if (_trajectory){
             QLineF line(_currentVelocityItem->pos(), mapToScene(event->pos()));
 
             SpaceBody* item = dynamic_cast<SpaceBody*>(_currentVelocityItem);
@@ -365,11 +366,9 @@ void GraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
     switch (_mode){
     case VectorEdit:
-        if (_currentVelocityItem){
+        if (_trajectory){
             _currentVelocityItem = nullptr;
-            scene()->removeItem(_trajectory);
-            //      !!! MEMORY LEAK !!! \/---- fix it (crashes sometimes if delete this)
-            //            delete _trajectory;
+            delete _trajectory;
             _trajectory = nullptr;
         }
         break;
@@ -392,6 +391,7 @@ void GraphicsView::setMouseMode(GraphicsView::MouseMode mode)
     case PropEdit:
         if (_propertiesWgt){
             scene()->removeItem(_propertiesWgt);
+            delete _propertiesWgt;
             _propertiesWgt = nullptr;
         }
         break;

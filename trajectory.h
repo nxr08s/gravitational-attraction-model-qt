@@ -16,7 +16,7 @@ class Trajectory : public QGraphicsItem
     QList<QPointF> _points;
 
 public:
-    Trajectory(QGraphicsItem *parent, QList<SpaceBody*> &items);
+    Trajectory(QGraphicsItem *parent, QList<SpaceBody*> items);
     void updatePath();
 
 protected:
@@ -25,8 +25,6 @@ protected:
                QWidget *widget = nullptr) override;
     QRectF boundingRect() const override;
     int type() const override { return UserType + 2; };
-//    QPainterPath shape() const override;
-
 };
 
 #endif // TRAJECTORY_H

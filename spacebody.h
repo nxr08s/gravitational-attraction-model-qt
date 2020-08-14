@@ -40,11 +40,12 @@ public:
     void addForce(PhysVector force);
     void applyForce();
 
-protected:
-    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
+    int type() const override { return UserType; };
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    int type() const override { return UserType; };
+
+protected:
+    void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
 public slots:
     void enableVector(bool enable) { _drawVelocityVector = enable; };
