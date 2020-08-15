@@ -2,7 +2,6 @@
 
 #include <QGraphicsScene>
 #include <QPainter>
-#include <QDebug>
 
 #include "physvector.h"
 #include "spacebody.h"

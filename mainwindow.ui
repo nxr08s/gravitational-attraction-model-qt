@@ -114,22 +114,16 @@
    <addaction name="separator"/>
    <addaction name="themeAction"/>
   </widget>
-  <action name="stopAction">
-   <property name="icon">
-    <iconset resource="res.qrc">
-     <normaloff>:/resources/stop.svg</normaloff>:/resources/stop.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Стоп</string>
-   </property>
-  </action>
   <action name="startStopAction">
    <property name="icon">
     <iconset resource="res.qrc">
      <normaloff>:/resources/start.svg</normaloff>:/resources/start.svg</iconset>
    </property>
    <property name="text">
-    <string>Пуск</string>
+    <string>Пуск/Старт</string>
+   </property>
+   <property name="toolTip">
+    <string>Пуск/Старт</string>
    </property>
   </action>
   <action name="addItemAction">
@@ -141,7 +135,10 @@
      <normaloff>:/resources/addItem.svg</normaloff>:/resources/addItem.svg</iconset>
    </property>
    <property name="text">
-    <string>Новый</string>
+    <string>Новый объект</string>
+   </property>
+   <property name="toolTip">
+    <string>Новый объект</string>
    </property>
   </action>
   <action name="speedUpAction">
@@ -213,7 +210,10 @@
      <normaloff>:/resources/editProp.svg</normaloff>:/resources/editProp.svg</iconset>
    </property>
    <property name="text">
-    <string>Ред. свойства</string>
+    <string>Редактировать свойства</string>
+   </property>
+   <property name="toolTip">
+    <string>Редактировать свойства</string>
    </property>
   </action>
   <action name="velEditAction">
@@ -225,7 +225,10 @@
      <normaloff>:/resources/vectorEdit.svg</normaloff>:/resources/vectorEdit.svg</iconset>
    </property>
    <property name="text">
-    <string>Ред. скорость</string>
+    <string>Редактировать скорость</string>
+   </property>
+   <property name="toolTip">
+    <string>Редактировать скорость</string>
    </property>
   </action>
   <action name="trailAction">
@@ -240,7 +243,10 @@
      <normaloff>:/resources/drawTrail.svg</normaloff>:/resources/drawTrail.svg</iconset>
    </property>
    <property name="text">
-    <string>Хвост</string>
+    <string>Отображение следа</string>
+   </property>
+   <property name="toolTip">
+    <string>Отображение следа</string>
    </property>
   </action>
   <action name="vectorsAction">
@@ -255,7 +261,10 @@
      <normaloff>:/resources/drawVector.svg</normaloff>:/resources/drawVector.svg</iconset>
    </property>
    <property name="text">
-    <string>Вектора</string>
+    <string>Отображение векторов скорости</string>
+   </property>
+   <property name="toolTip">
+    <string>Отображение векторов скорости</string>
    </property>
   </action>
   <action name="zoomInAction">
@@ -264,7 +273,10 @@
      <normaloff>:/resources/zoomIn.svg</normaloff>:/resources/zoomIn.svg</iconset>
    </property>
    <property name="text">
-    <string>+</string>
+    <string>Приблизить</string>
+   </property>
+   <property name="toolTip">
+    <string>Приблизить</string>
    </property>
   </action>
   <action name="zoomOutAction">
@@ -273,7 +285,10 @@
      <normaloff>:/resources/zoomOut.svg</normaloff>:/resources/zoomOut.svg</iconset>
    </property>
    <property name="text">
-    <string>-</string>
+    <string>Отдалить</string>
+   </property>
+   <property name="toolTip">
+    <string>Отдалить</string>
    </property>
   </action>
   <action name="themeAction">
@@ -282,10 +297,10 @@
      <normaloff>:/resources/themeLight.svg</normaloff>:/resources/themeLight.svg</iconset>
    </property>
    <property name="text">
-    <string>Тема</string>
+    <string>Темная тема / Светлая тема</string>
    </property>
    <property name="toolTip">
-    <string>Темная / Светлая тема</string>
+    <string>Темная тема / Светлая тема</string>
    </property>
   </action>
  </widget>

@@ -2,7 +2,6 @@
 #define TRAJECTORY_H
 
 #include <QGraphicsItem>
-#include <QDebug>
 
 class SpaceBody;
 class PhysVector;

@@ -28,11 +28,11 @@ ItemProperties::ItemProperties(QGraphicsItem *item, QWidget *parent)
 
     body = dynamic_cast<SpaceBody*>(item);
 
-    QVBoxLayout *lt1 = new QVBoxLayout(this);
-    QGroupBox *box = new QGroupBox("Свойства объекта", this);
+    auto lt1 = new QVBoxLayout(this);
+    auto box = new QGroupBox("Свойства объекта", this);
     lt1->addWidget(box);
 
-    QVBoxLayout *mainLt = new QVBoxLayout(box);
+    auto *mainLt = new QVBoxLayout(box);
     QHBoxLayout *lt;
 
     applyBtn = new QPushButton("Принять", this);

@@ -5,7 +5,6 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QDebug>
 
 #include "dbhelper.h"
 
@@ -16,14 +15,14 @@ LoadDialog::LoadDialog(QWidget* parent, DbHelper* database)
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     setWindowTitle("Загрузить");
 
-    QVBoxLayout *mainLt = new QVBoxLayout;
+    auto mainLt = new QVBoxLayout;
     setLayout(mainLt);
 
     listWgt = new QListWidget(this);
     listWgt->addItems(db->saveNames());
     mainLt->addWidget(listWgt);
 
-    QHBoxLayout *lt = new QHBoxLayout;
+    auto lt = new QHBoxLayout;
     mainLt->addLayout(lt);
 
     acceptBtn = new QPushButton("Загрузить", this);
@@ -60,11 +59,12 @@ void LoadDialog::itemSelected(QListWidgetItem*)
 
 void LoadDialog::onClickRemove()
 {
-    QMessageBox::StandardButton result = QMessageBox::question(
+    QMessageBox::StandardButton result =
+            QMessageBox::question(
                 nullptr, "Удалить сохранения",
                 "Удалить сохранение '" + listWgt->currentItem()->text() + "'?");
-    if (result == QMessageBox::Yes)
-    {
+
+    if (result == QMessageBox::Yes){
         db->removeSave(listWgt->currentItem()->text());
         listWgt->takeItem(listWgt->currentRow());
     }

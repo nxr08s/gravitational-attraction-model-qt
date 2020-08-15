@@ -15,8 +15,18 @@ class GraphicsView : public QGraphicsView
     Q_OBJECT
 
 public:
-    enum MouseMode { None, NewItem, VectorEdit, PropEdit };
-    enum Type { Body = 65536, Trail, Traectory };
+    enum MouseMode {
+        None,
+        NewItem,
+        VectorEdit,
+        PropEdit
+    };
+
+    enum Type {
+        Body = 65536,
+        Trail,
+        Traectory
+    };
 
     QList<SpaceBody*> bodies();
 
@@ -59,7 +69,7 @@ public:
         _timeScale = scale;
         emit timeScaleChanged(timeScale());
     };
-    void clearScene();    
+    void clearScene();
     void setMouseMode(MouseMode _mode);
 
 protected:
@@ -67,8 +77,6 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     void timerEvent(QTimerEvent* event) override;
-//    void drawBackground(QPainter *painter, const QRectF &rect) override;
-
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;

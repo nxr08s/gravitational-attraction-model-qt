@@ -16,7 +16,7 @@ DbHelper::DbHelper()
         return;
     }
 
-    if (db.tables().size() == 0){
+    if (db.tables().empty()){
         db.exec("create table saves ("
                 "save_name text, "
                 "mass real, "
@@ -45,7 +45,7 @@ QStringList DbHelper::saveNames() const
     return returnList;
 }
 
-void DbHelper::save(QString save_name, QList<SpaceBody*> items)
+void DbHelper::save(const QString& save_name, QList<SpaceBody*> items)
 {
     for (SpaceBody* item : items){
         QSqlQuery query(db);
@@ -70,7 +70,7 @@ void DbHelper::save(QString save_name, QList<SpaceBody*> items)
     }
 }
 
-QList<SpaceBody*> DbHelper::load(QString saveName) const
+QList<SpaceBody*> DbHelper::load(const QString& saveName) const
 {
     QList<SpaceBody*> items;
 
@@ -94,7 +94,7 @@ QList<SpaceBody*> DbHelper::load(QString saveName) const
     return items;
 }
 
-void DbHelper::removeSave(QString saveName)
+void DbHelper::removeSave(const QString& saveName)
 {
     QSqlQuery query(db);
     query.prepare("delete from saves where save_name = :name");

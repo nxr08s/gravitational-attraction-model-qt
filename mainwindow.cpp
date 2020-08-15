@@ -53,13 +53,12 @@ MainWindow::MainWindow(QWidget *parent)
     , graphicsView(new GraphicsView(this))
     , modeGroup(new QActionGroup(this))
     , _running(false)
+    , _currentTheme(Dark)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     setWindowTitle("Гравитационная модель");
-
-    setTheme(Dark);
 
     ui->statusBar->addWidget(scaleLabel = new QLabel("Масштаб: 100%", this));
     ui->statusBar->addWidget(modeLabel = new QLabel("Режим: Просмотр", this));
@@ -67,13 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
             new QLabel("Множитель времени: " + QString::number(graphicsView->timeScale()),
                        this));
 
-
     setCentralWidget(graphicsView);
-    graphicsView->setRenderHint(QPainter::Antialiasing);
-
-    graphicsView->addItem(QPoint(0, 0), 2.1, 0, 0, 100);
-    graphicsView->addItem(QPoint(200, 0), 0.1, 0, 0.084, 10);
-    graphicsView->addItem(QPoint(-250, 50), 0.08, 0, 0.085, 7);
 
     ui->propEditAction->setData(QVariant(GraphicsView::PropEdit));
     ui->velEditAction->setData(QVariant(GraphicsView::VectorEdit));
@@ -83,9 +76,11 @@ MainWindow::MainWindow(QWidget *parent)
     modeGroup->addAction(ui->propEditAction);
     modeGroup->addAction(ui->velEditAction);
     modeGroup->addAction(ui->addItemAction);
-    connect(modeGroup, SIGNAL(triggered(QAction*)), this, SLOT(modeGroupTriggered(QAction*)));
+    connect(modeGroup, SIGNAL(triggered(QAction*)),
+            this, SLOT(modeGroupTriggered(QAction*)));
 
-    connect(ui->speedDownDownAction, SIGNAL(triggered()), this, SLOT(onClickSpeedDownDown()));
+    connect(ui->speedDownDownAction, SIGNAL(triggered()),
+            this, SLOT(onClickSpeedDownDown()));
     connect(ui->speedDownAction, SIGNAL(triggered()), this, SLOT(onClickSpeedDown()));
     connect(ui->startStopAction, SIGNAL(triggered()), this, SLOT(onClickStartStop()));
     connect(ui->speedUpAction, SIGNAL(triggered()), this, SLOT(onClickSpeedUp()));
@@ -93,7 +88,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->zoomInAction, SIGNAL(triggered()), graphicsView, SLOT(zoomIn()));
     connect(ui->zoomOutAction, SIGNAL(triggered()), graphicsView, SLOT(zoomOut()));
-    connect(ui->vectorsAction, SIGNAL(toggled(bool)), graphicsView, SLOT(vectorChecked(bool)));
+    connect(ui->vectorsAction, SIGNAL(toggled(bool)),
+            graphicsView, SLOT(vectorChecked(bool)));
     connect(ui->trailAction, SIGNAL(toggled(bool)), this, SLOT(onToggleTrail(bool)));
 
     connect(ui->saveAction, SIGNAL(triggered()), this, SLOT(onClickSave()));
@@ -102,9 +98,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(graphicsView, SIGNAL(modeChanged(unsigned int)),
             this, SLOT(modeChanged(unsigned int)));
     connect(graphicsView, SIGNAL(zoomChanged(qreal)), this, SLOT(zoomChanged(qreal)));
-    connect(graphicsView, SIGNAL(timeScaleChanged(int)), this, SLOT(timeScaleChanged(int)));
+    connect(graphicsView, SIGNAL(timeScaleChanged(int)),
+            this, SLOT(timeScaleChanged(int)));
     connect(ui->themeAction, SIGNAL(triggered()), this, SLOT(onClickTheme()));
 
+    setTheme(Dark);
     modeChanged(GraphicsView::None);
 }
 

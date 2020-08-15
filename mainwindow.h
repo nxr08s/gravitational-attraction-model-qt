@@ -16,7 +16,10 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    enum Theme { Light, Dark };
+    enum Theme {
+        Light,
+        Dark
+    };
 
     GraphicsView *graphicsView;
     QActionGroup *modeGroup;

@@ -18,6 +18,10 @@
 #include "itemproperties.h"
 #include "trajectory.h"
 
+const int __frameRate = 60;
+const int __startTimeScale = 50;
+const int __tailLength = 100;
+
 QList<SpaceBody *> GraphicsView::bodies()
 {
     QList<SpaceBody*> returnList;
@@ -39,13 +43,13 @@ PhysVector GraphicsView::calculateForce(SpaceBody *s1, SpaceBody *s2)
 
 void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
 {
-    qreal   contactAngle = qDegreesToRadians(QLineF(body1->pos(), body2->pos()).angle()),
-            ang1 = qDegreesToRadians(body1->getVelocity().angle()),
-            ang2 = qDegreesToRadians(body2->getVelocity().angle()),
-            vel1 = body1->getVelocity().length(),
-            vel2 = body2->getVelocity().length(),
-            m1 = body1->getMass(),
-            m2 = body2->getMass();
+    qreal contactAngle = qDegreesToRadians(QLineF(body1->pos(), body2->pos()).angle());
+    qreal ang1 = qDegreesToRadians(body1->getVelocity().angle());
+    qreal ang2 = qDegreesToRadians(body2->getVelocity().angle());
+    qreal vel1 = body1->getVelocity().length();
+    qreal vel2 = body2->getVelocity().length();
+    qreal m1 = body1->getMass();
+    qreal m2 = body2->getMass();
 
     //calculate body1's new velocity
     if (!body1->isStatic()){
@@ -53,9 +57,9 @@ void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
                         + 2*m2*vel2*cos(ang2 - contactAngle)) / (m1 + m2);
 
         qreal   speedX1 = tmp1*cos(contactAngle) + vel1*sin(ang1 - contactAngle)
-                          *cos(contactAngle + M_PI_2),
-                speedY1 = -(tmp1*sin(contactAngle) + vel1*sin(ang1 - contactAngle)
-                            *sin(contactAngle + M_PI_2));
+                          *cos(contactAngle + M_PI_2);
+        qreal  speedY1 = -(tmp1*sin(contactAngle) + vel1*sin(ang1 - contactAngle)
+                           *sin(contactAngle + M_PI_2));
 
         PhysVector velocity1(speedX1 * 1, speedY1 * 1);
         body1->setVelocity(velocity1);
@@ -67,9 +71,9 @@ void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
                         + 2*m1*vel1*cos(ang1 - contactAngle)) / (m1 + m2);
 
         qreal   speedX2 = tmp2*cos(contactAngle) + vel2*sin(ang2 - contactAngle)*
-                          cos(contactAngle + M_PI_2),
-                speedY2 = -(tmp2*sin(contactAngle) + vel2*sin(ang2 - contactAngle)*
-                            sin(contactAngle + M_PI_2));
+                          cos(contactAngle + M_PI_2);
+        qreal speedY2 = -(tmp2*sin(contactAngle) + vel2*sin(ang2 - contactAngle)*
+                          sin(contactAngle + M_PI_2));
 
         PhysVector velocity2(speedX2 * 1, speedY2 * 1);
         body2->setVelocity(velocity2);
@@ -91,9 +95,9 @@ QGraphicsItem *GraphicsView::getBodyUnderMouse(QPoint pos)
 
 QGraphicsProxyWidget *GraphicsView::createItemPropItem(QGraphicsItem *itm)
 {
-    ItemProperties *itemProp = new ItemProperties(itm);
+    auto itemProp = new ItemProperties(itm);
 
-    QGraphicsProxyWidget* propWgt = scene()->addWidget(itemProp);
+    auto propWgt = scene()->addWidget(itemProp);
 
     propWgt->setPos(itm->pos());
     propWgt->setScale(1 / _scale);
@@ -113,11 +117,12 @@ GraphicsView::GraphicsView(QWidget *parent)
     , _scale(1.)
     , _ctrlPressed(false)
     , _spacePressed(false)
-    , _frameRate(60)
-    , _trailLength(100)
-    , _timeScale(50)
+    , _frameRate(__frameRate)
+    , _trailLength(__tailLength)
+    , _timeScale(__startTimeScale)
     , _timerId(-1)
     , _tailEnabled(true)
+    , _vectorEnabled(false)
     , _propertiesWgt(nullptr)
     , _currentVelocityItem(nullptr)
     , _trajectory(nullptr)
@@ -126,14 +131,14 @@ GraphicsView::GraphicsView(QWidget *parent)
 
     setTransformationAnchor(AnchorUnderMouse);
     setRenderHint(QPainter::Antialiasing);
-    //    setViewportUpdateMode(SmartViewportUpdate);
+    setViewportUpdateMode(SmartViewportUpdate);
     //    setOptimizationFlag(DontAdjustForAntialiasing);
 }
 
 QGraphicsItem* GraphicsView::addItem(QPointF pos, qreal mass, qreal xVel, qreal yVel, qreal radius)
 {
-    SpaceBody *newBody = new SpaceBody(pos, mass, xVel, yVel, radius);
-    BodyTrail *trail = new BodyTrail(newBody);
+    auto *newBody = new SpaceBody(pos, mass, xVel, yVel, radius);
+    auto *trail = new BodyTrail(newBody);
     scene()->addItem(newBody);
 
     trail->setLength(_trailLength);
@@ -152,7 +157,7 @@ QGraphicsItem* GraphicsView::addItem(QPointF pos, qreal mass, qreal xVel, qreal 
 void GraphicsView::insertItems(QList<SpaceBody*> items)
 {
     for (SpaceBody* item: items){
-        BodyTrail* trail = new BodyTrail(item);
+        auto* trail = new BodyTrail(item);
         scene()->addItem(item);
 
         trail->setLength(_trailLength);
@@ -234,37 +239,30 @@ void GraphicsView::timerEvent(QTimerEvent *event)
     if (_timerId == event->timerId()){
         QList<SpaceBody*> items = bodies();
         for (int i = 0; i < _timeScale; i++){
-            //            QElapsedTimer timer;
-            //            timer.start();
-            //            qDebug() << " ------ ";
 
-            //             calculate all gravitational forces
+            // calculate all gravitational forces
             for (auto b1 = items.begin(); b1 != items.end(); ++b1)
                 for (auto b2 = b1 + 1; b2 != items.end(); ++b2){
                     PhysVector force = calculateForce(*b1, *b2);
                     (*b1)->addForce(force);
                     (*b2)->addForce(PhysVector::reversed(force));
                 }
-            //            qDebug() << "forces:" << timer.nsecsElapsed();
-            //            timer.restart();
 
             // check for collisions
             for (auto b1 = items.begin(); b1 != items.end(); ++b1)
                 for (auto b2 = b1 + 1; b2 != items.end(); ++b2)
                     if ((*b1)->collidesWithItem(*b2))
                         processCollision(*b1, *b2);
-            //            qDebug() << "collisions:" << timer.nsecsElapsed();
-            //            timer.restart();
 
             // apply forces to all space bodies
             for (auto b : items)
                 b->applyForce();
-            //            qDebug() << "applying forces:" << timer.nsecsElapsed();
-            //            timer.restart();
         }
 
         if (_tailEnabled)
             emit updateTrail();
+
+        //        update();
     }
 }
 
@@ -284,7 +282,7 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 
             QLineF line(itm->pos(), mapToScene(event->pos()));
 
-            SpaceBody* item = qgraphicsitem_cast<SpaceBody*>(itm);
+            auto item = qgraphicsitem_cast<SpaceBody*>(itm);
 
             if (item->getVelocity().isNull()){
                 item->getVelocity().setP2(QPointF(qreal(1) / 500, qreal(1) / 500));
@@ -298,6 +296,8 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
 
             _trajectory = new Trajectory(_currentVelocityItem, items);
             _trajectory->updatePath();
+
+            update();
         }
         break;
     case PropEdit:
@@ -338,7 +338,7 @@ void GraphicsView::mouseMoveEvent(QMouseEvent *event)
         if (_trajectory){
             QLineF line(_currentVelocityItem->pos(), mapToScene(event->pos()));
 
-            SpaceBody* item = dynamic_cast<SpaceBody*>(_currentVelocityItem);
+            auto item = dynamic_cast<SpaceBody*>(_currentVelocityItem);
             if (item->getVelocity().isNull()){
                 item->getVelocity().setP2(QPointF(qreal(1) / 500, qreal(1) / 500));
             }

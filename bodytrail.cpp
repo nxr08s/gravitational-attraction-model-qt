@@ -6,9 +6,11 @@
 
 #include <algorithm>
 
+const int __base_length = 100;
+
 BodyTrail::BodyTrail(QGraphicsItem *attachedTo)
     : QGraphicsItem(attachedTo)
-    , _length(100)
+    , _length(__base_length)
 {
     _points << parentItem()->pos();
     setFlag(QGraphicsItem::ItemStacksBehindParent);
@@ -41,7 +43,9 @@ void BodyTrail::paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidge
     if (!_length)
         return;
 
-    qreal opacStep = .5 / _points.size();
+    qreal fullOpacity = .5;
+
+    qreal opacStep = fullOpacity / _points.size();
     painter->setOpacity(0);
 
     for (int i = 1; i < _points.size(); i++){

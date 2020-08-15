@@ -5,7 +5,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/resources/icon.svg"));
+
+    QApplication::setWindowIcon(QIcon(":/resources/icon.svg"));
 
     MainWindow w;
     w.show();

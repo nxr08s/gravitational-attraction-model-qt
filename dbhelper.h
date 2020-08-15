@@ -14,9 +14,9 @@ public:
     DbHelper();
     ~DbHelper();
 
-    void save(QString, QList<SpaceBody*>);
-    QList<SpaceBody*> load(QString) const;
-    void removeSave(QString);
+    void save(const QString&, QList<SpaceBody*>);
+    QList<SpaceBody*> load(const QString&) const;
+    void removeSave(const QString&);
     QStringList saveNames() const;
 };
 

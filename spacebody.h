@@ -24,7 +24,7 @@ class SpaceBody
 public:
     SpaceBody(qreal xPos, qreal yPos,
               qreal mass, qreal radius,
-              qreal velocity, qreal angle, int isStatic=false);
+              qreal velocity, qreal angle, int stat=false);
     SpaceBody(QPointF pos, qreal mass, qreal xvel, qreal yvel, qreal rad);
     void setMass(qreal newMass) { _mass = newMass; };
     void setRadius(qreal newRad) { _radius = newRad; };
