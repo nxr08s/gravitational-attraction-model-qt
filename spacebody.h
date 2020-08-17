@@ -12,8 +12,6 @@ class SpaceBody
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
 
-    QPointF _virtualPoint;
-
     qreal _mass;
     qreal _radius;
     PhysVector _velocity;
