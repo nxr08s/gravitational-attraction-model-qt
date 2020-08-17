@@ -2,6 +2,8 @@ QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+QMAKE_LFLAGS_RELEASE += -static -static-libgcc
+
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
