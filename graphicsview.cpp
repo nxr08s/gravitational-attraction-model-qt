@@ -35,6 +35,8 @@ QList<SpaceBody *> GraphicsView::bodies()
 PhysVector GraphicsView::calculateForce(SpaceBody *s1, SpaceBody *s2)
 {
     PhysVector range(s1->pos() , s2->pos());
+//    PhysVector range(s1->virtualPos(), s2->virtualPos());
+
     qreal r = range.length();
     range.setLength(s1->getMass() * s2->getMass() / (r * r));
 
@@ -44,6 +46,7 @@ PhysVector GraphicsView::calculateForce(SpaceBody *s1, SpaceBody *s2)
 void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
 {
     qreal contactAngle = qDegreesToRadians(QLineF(body1->pos(), body2->pos()).angle());
+
     qreal ang1 = qDegreesToRadians(body1->getVelocity().angle());
     qreal ang2 = qDegreesToRadians(body2->getVelocity().angle());
     qreal vel1 = body1->getVelocity().length();
@@ -53,12 +56,12 @@ void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
 
     //calculate body1's new velocity
     if (!body1->isStatic()){
-        qreal   tmp1 = (vel1 * cos(ang1 - contactAngle) * (m1 - m2)
+        qreal tmp1 = (vel1 * cos(ang1 - contactAngle) * (m1 - m2)
                         + 2*m2*vel2*cos(ang2 - contactAngle)) / (m1 + m2);
 
-        qreal   speedX1 = tmp1*cos(contactAngle) + vel1*sin(ang1 - contactAngle)
+        qreal speedX1 = tmp1*cos(contactAngle) + vel1*sin(ang1 - contactAngle)
                           *cos(contactAngle + M_PI_2);
-        qreal  speedY1 = -(tmp1*sin(contactAngle) + vel1*sin(ang1 - contactAngle)
+        qreal speedY1 = -(tmp1*sin(contactAngle) + vel1*sin(ang1 - contactAngle)
                            *sin(contactAngle + M_PI_2));
 
         PhysVector velocity1(speedX1 * 1, speedY1 * 1);
@@ -67,10 +70,10 @@ void GraphicsView::processCollision(SpaceBody *body1, SpaceBody *body2)
 
     //calculate body2's new velocity
     if (!body2->isStatic()){
-        qreal   tmp2 = (vel2 * cos(ang2 - contactAngle) * (m2 - m1)
+        qreal tmp2 = (vel2 * cos(ang2 - contactAngle) * (m2 - m1)
                         + 2*m1*vel1*cos(ang1 - contactAngle)) / (m1 + m2);
 
-        qreal   speedX2 = tmp2*cos(contactAngle) + vel2*sin(ang2 - contactAngle)*
+        qreal speedX2 = tmp2*cos(contactAngle) + vel2*sin(ang2 - contactAngle)*
                           cos(contactAngle + M_PI_2);
         qreal speedY2 = -(tmp2*sin(contactAngle) + vel2*sin(ang2 - contactAngle)*
                           sin(contactAngle + M_PI_2));
@@ -108,6 +111,7 @@ QGraphicsProxyWidget *GraphicsView::createItemPropItem(QGraphicsItem *itm)
     connect(itemProp, SIGNAL(itemRemove(QGraphicsItem*)),
             this, SLOT(itemRemoved(QGraphicsItem*)));
 
+    itemProp->setFocus(Qt::OtherFocusReason);
     return propWgt;
 }
 
@@ -261,9 +265,7 @@ void GraphicsView::timerEvent(QTimerEvent *event)
 
         if (_tailEnabled)
             emit updateTrail();
-
-        //        update();
-    }
+        }
 }
 
 void GraphicsView::mousePressEvent(QMouseEvent *event)
@@ -308,8 +310,9 @@ void GraphicsView::mousePressEvent(QMouseEvent *event)
                 return;
             }
         }else{
-            if (itm && itm->type() == Body && event->button() == Qt::RightButton)
+            if (itm && itm->type() == Body && event->button() == Qt::RightButton){
                 _propertiesWgt = createItemPropItem(itm);
+            }
         }
         QGraphicsView::mousePressEvent(event);
         break;
